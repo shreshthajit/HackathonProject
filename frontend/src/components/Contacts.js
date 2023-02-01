@@ -1,0 +1,138 @@
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Logo from "../assets/logo.svg";
+
+const Contacts = ({ contacts, currentUser,changeChat }) => {
+  const [currentUserName, setCurrentUserName] = useState(undefined);
+  const [currentUserImage, setCurrentUserImage] = useState(undefined);
+  const [currentSelected, setCurrentSelected] = useState(undefined);
+
+  useEffect(() => {
+    if (currentUser) {
+      setCurrentUserImage(currentUser.avatarImage);
+      setCurrentUserName(currentUser.username);
+    }
+  }, [currentUser]);
+
+
+  const changeCurrentChat = (index, contact) => {
+    setCurrentSelected(index);
+    changeChat(contact);
+  };
+
+  console.log("my contacts" + contacts);
+  return (
+    <div>
+      {currentUserImage && currentUserName && (
+        <Container>
+          <div className="brand">
+            <img src={Logo} alt="logo" />
+            <h3>Chats</h3>
+          </div>
+
+          <div className="contacts">
+            {contacts.map((contact, index) => {
+              return (
+                <div
+                  className={`contact ${
+                    index === currentSelected ? "selected" : ""
+                  }`}
+                  onClick={() => changeCurrentChat(index, contact)}
+                  key={index}
+                >
+                  <div className="avatar">
+                    <img
+                      src={contact.avatarImage}
+                      alt="avatar"
+                    />
+                  </div>
+                  <div className="username">
+                    <h3>{contact.username}</h3>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* <div className="current-user pt-5">
+            <div className="avatar">
+              <img
+                src={`data:image/svg+xml;base64,${currentUserImage}`}
+                alt="avatar"
+              />
+            </div>
+            <div className="username pl-0">
+              <h2>Me</h2>
+            </div>
+          </div> */}
+        </Container>
+      )}
+    </div>
+  );
+};
+
+const Container = styled.div`
+  display: grid;
+  // grid-template-rows: 10% 75% 15%;
+  //overflow: hidden;
+  //background-color: #080420;
+  background-color: #e9edf6;
+  width: 90vh;
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    img {
+      height: 2rem;
+    }
+    h3 {
+      color: black;
+      text-transform: uppercase;
+    }
+  }
+  .contacts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    //overflow: auto;
+    gap: 0.8rem;
+    &::-webkit-scrollbar {
+      width: 0.2rem;
+      &-thumb {
+        background-color: #ffffff39;
+        width: 0.1rem;
+        border-radius: 1rem;
+      }
+    }
+    .contact {
+     // background-color: #ffffff34;
+      background-color: white;
+      min-height: 5rem;
+      cursor: pointer;
+      width: 90%;
+      border-radius: 0.2rem;
+      padding: 0.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      transition: 0.5s ease-in-out;
+      .avatar {
+        img {
+          height: 3rem;
+        }
+      }
+      .username {
+        h3 {
+          color: black;
+        }
+      }
+    }
+    .selected {
+      //background-color: #9a86f3;
+    }
+  }
+  
+`;
+
+export default Contacts;
